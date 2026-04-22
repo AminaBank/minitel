@@ -39,18 +39,19 @@ export const ETH = {
   token: 'ETH',
   name: 'Ethereum',
   icon: <EthereumIcon className="size-5" />,
-  url: 'https://eth.minitel.app',
-  localUrl: 'http://localhost:3000',
+  url: '/eth',
+  localUrl: '/eth',
 } satisfies Protocol;
 
 export const SOL = {
   token: 'SOL',
   name: 'Solana',
   icon: <SolanaIcon className="size-5" />,
-  url: 'https://sol.minitel.app',
-  localUrl: 'http://localhost:3001',
+  url: '/sol',
+  localUrl: '/sol',
 } satisfies Protocol;
 
+/* DISABLED
 export const ATOM = {
   token: 'ATOM',
   name: 'Cosmos',
@@ -204,34 +205,36 @@ export const KSM = {
   localUrl: 'http://localhost:3020',
 } satisfies Protocol;
 
+*/
+
 export const PROTOCOLS: Protocol[] = [
   ETH,
   SOL,
-  ATOM,
-  NEAR,
-  CRO,
-  SEI,
-  ZETA,
-  DYDX,
-  FET,
-  INJ,
-  KAVA,
-  OM,
-  TIA,
-  OSMO,
-  ADA,
-  SUI,
-  XTZ,
-  TON,
-  TRX,
-  DOT,
-  KSM,
+  // ATOM,
+  // NEAR,
+  // CRO,
+  // SEI,
+  // ZETA,
+  // DYDX,
+  // FET,
+  // INJ,
+  // KAVA,
+  // OM,
+  // TIA,
+  // OSMO,
+  // ADA,
+  // SUI,
+  // XTZ,
+  // TON,
+  // TRX,
+  // DOT,
+  // KSM,
 ];
 
 export const getCurrentProtocol = () => {
-  const currentOrigin = window.location.origin;
+  const currentOrigin = window.location.pathname.split('/')[1];
   const currentProtocol = PROTOCOLS.find(
-    (protocol) => protocol.url === currentOrigin || protocol.localUrl === currentOrigin,
+    (protocol) => protocol.token.toLowerCase() === currentOrigin,
   );
   if (!currentProtocol) {
     throw new Error('Current protocol is not defined');

@@ -10,10 +10,10 @@
     "hoisting": false
   },
   "scripts": {
-    "format": "bun --filter '*' format",
-    "lint": "bun --filter '*' lint",
-    "dev": "bun --filter '*' dev",
-    "build": "bun --filter '*' build",
+    "format": "bun --filter './apps/ethereum' --filter './apps/solana' format",
+    "lint": "bun --filter './apps/ethereum' --filter './apps/solana' lint",
+    "dev": "bun --filter './apps/ethereum' --filter './apps/solana' dev",
+    "build": "bun --filter './apps/ethereum' --filter './apps/solana' build",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules"
   },
   "dependencies": {

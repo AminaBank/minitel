@@ -15,7 +15,8 @@ function App() {
 
   const onChangeProtocol = (protocol: Protocol) => {
     const protocolUrl = import.meta.env.DEV ? protocol.localUrl : protocol.url;
-    window.open(protocolUrl, '_blank', 'noopener,noreferrer');
+    // window.open(protocolUrl, '_blank', 'noopener,noreferrer');
+    window.location.assign(protocolUrl);
   };
 
   const playbookConfig = {

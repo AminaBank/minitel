@@ -52,10 +52,8 @@ export const Header = ({
               <div className="flex items-center gap-1">
                 {protocol.icon && protocol.icon} {protocol.name}
               </div>
-              {currentProtocol.name === protocol.name ? (
+              {currentProtocol.name === protocol.name && (
                 <CheckIcon className="w-4 h-4 text-muted-foreground" />
-              ) : (
-                <ExternalLinkIcon className="w-4 h-4 text-muted-foreground" />
               )}
             </DropdownMenuItem>
           ))}
