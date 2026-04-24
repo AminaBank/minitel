@@ -2,65 +2,35 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# install system deps
-RUN apk add --no-cache bash nginx openrc
+# system deps
+RUN apk add --no-cache bash nginx
 
-# Install bun
+# install bun
 RUN npm install -g bun
-RUN bun --version
 
-# Create user
+# create user
 RUN addgroup -g 10001 satoshi \
- && adduser -D -u 10001 -G satoshi -s /sbin/nologin satoshi
+ && adduser -D -u 10001 -G satoshi -s /bin/sh satoshi
 
-# Copy repo
+# copy repo first
 COPY . .
 
-# Set permissions
-RUN chown -R satoshi:satoshi /app
-RUN mkdir -p /tmp/.vite \
-    && chown -R satoshi:satoshi /tmp/.vite
+# nginx runtime dirs
+RUN mkdir -p /run/nginx \
+    /var/log/nginx \
+    /var/lib/nginx/tmp \
+ && chown -R nginx:nginx /run/nginx /var/log/nginx /var/lib/nginx
 
-# Nginx config
+# nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Create nginx runtime directories
-# RUN mkdir -p /var/lib/nginx/tmp/client_body \
-#     && mkdir -p /var/log/nginx \
-#     && mkdir -p /run/nginx \
-#     && mkdir -p /app/apps \
-#     && mkdir -p /tmp/.vite
+# fix app permissions for satoshi
+RUN chown -R satoshi:satoshi /app
 
-# RUN mkdir -p /var/lib/nginx/tmp /var/log/nginx /run/nginx \
-#     && chown -R satoshi:satoshi /var/lib/nginx /var/log/nginx /run/nginx \
-#     && chmod -R 755 /var/lib/nginx /var/log/nginx /run/nginx
-
-# Set permissions
-# RUN chown -R satoshi:satoshi /app
-# RUN mkdir -p /tmp/.vite \
-#     && chown -R satoshi:satoshi /tmp/.vite
-
-# ensure app is writable for Vite cache
-# RUN chown -R satoshi:satoshi /app \
-#     && chown -R satoshi:satoshi /var/lib/nginx \
-#     && chown -R satoshi:satoshi /var/log/nginx \
-#     && chown -R satoshi:satoshi /run/nginx \
-#     && chown -R satoshi:satoshi /tmp/.vite
-
-# Run nginx on startup
-# RUN mkdir -p /run/openrc/ \
-#     && touch /run/openrc/softlevel \
-#     && rc-update add nginx default
-
-# Switch to non-root user
-# USER satoshi
-
-# Install deps
+# install deps as root
 RUN bun install
 
-# Expose default 80 port
 EXPOSE 80
 
-# Run
-CMD ["sh", "-c", "bun run dev & sleep 3 && nginx -g 'daemon off;'"]
-#CMD ["bun", "run", "dev"]
+# start both services
+CMD ["sh", "-c", "bun run dev & nginx -g 'daemon off;'"]

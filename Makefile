@@ -1,5 +1,5 @@
 TAG := amina-minitel
-PORT ?= 80
+PORT ?= 8355
 
 
 build:

@@ -13,10 +13,13 @@ function App() {
     setPlaybook(!playbook);
   };
 
+  // const onChangeProtocol = (protocol: Protocol) => {
+  //   const protocolUrl = import.meta.env.DEV ? protocol.localUrl : protocol.url;
+  //   window.location.assign(protocolUrl);
+  // };
+
   const onChangeProtocol = (protocol: Protocol) => {
-    const protocolUrl = import.meta.env.DEV ? protocol.localUrl : protocol.url;
-    // window.open(protocolUrl, '_blank', 'noopener,noreferrer');
-    window.location.assign(protocolUrl);
+    window.location.assign(`/${protocol.path}/`);
   };
 
   const playbookConfig = {

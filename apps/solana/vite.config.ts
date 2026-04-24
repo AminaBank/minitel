@@ -5,7 +5,6 @@ import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
-  cacheDir: '/tmp/.vite',
   base: '/sol/',
   plugins: [
     react(),

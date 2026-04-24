@@ -20,7 +20,7 @@ export const Header = ({
   isPlaybookOpen,
 }: HeaderProps) => {
   const handleProtocolChange = (protocol: Protocol) => {
-    if (currentProtocol.url === protocol.url || currentProtocol.localUrl === protocol.localUrl) return;
+    if (currentProtocol.token === protocol.token) return;
     onChangeProtocol(protocol);
   };
 
