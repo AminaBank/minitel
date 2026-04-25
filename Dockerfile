@@ -22,8 +22,6 @@ COPY tsconfig.json tsconfig.json
 # configs
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
-COPY start.sh start.sh
-RUN chmod +x start.sh
 
 # create nginx required dirs
 RUN mkdir -p /tmp/nginx/logs \
