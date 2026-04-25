@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # system deps
-RUN apk add --no-cache bash nginx
+RUN apk add --no-cache bash nginx supervisor
 
 # install bun
 RUN npm install -g bun
@@ -13,24 +13,33 @@ RUN addgroup -g 10001 satoshi \
  && adduser -D -u 10001 -G satoshi -s /bin/sh satoshi
 
 # copy repo first
-COPY . .
+COPY apps apps
+COPY packages packages
+COPY bun.lock bun.lock
+COPY package.json package.json
+COPY tsconfig.json tsconfig.json
 
-# nginx runtime dirs
-RUN mkdir -p /run/nginx \
-    /var/log/nginx \
-    /var/lib/nginx/tmp \
- && chown -R nginx:nginx /run/nginx /var/log/nginx /var/lib/nginx
-
-# nginx config
+# configs
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /etc/supervisord.conf
+COPY start.sh start.sh
+RUN chmod +x start.sh
+
+# create nginx required dirs
+RUN mkdir -p /tmp/nginx/logs \
+    /tmp/nginx/client_body \
+    /tmp/nginx/proxy \
+    /tmp/nginx/fastcgi \
+    && chown -R satoshi:satoshi /tmp/nginx
 
 # fix app permissions for satoshi
 RUN chown -R satoshi:satoshi /app
+USER satoshi
 
-# install deps as root
+# install deps
 RUN bun install
 
-EXPOSE 80
+EXPOSE 8088
 
-# start both services
-CMD ["sh", "-c", "bun run dev & nginx -g 'daemon off;'"]
+# start
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

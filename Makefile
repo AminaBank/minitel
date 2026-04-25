@@ -9,5 +9,5 @@ build:
 
 run:
 	docker run \
-		-p ${PORT}:80 \
+		-p ${PORT}:8088 \
 		${TAG}
